@@ -1,0 +1,56 @@
+##### Students
+GET http://localhost:8080/academics/api/students
+Accept: application/json
+###
+POST http://localhost:8080/academics/api/students
+Content-Type: application/json
+
+{
+ "email": "johndoe@mail.com",
+ "name": "John Doe",
+ "username": "john",
+ "password": "jd",
+ "courseCode": 123
+
+}
+
+##### Courses
+GET http://localhost:8080/academics/api/courses
+Accept: application/json
+###
+POST http://localhost:8080/academics/api/courses
+Content-Type: application/json
+
+{
+  "code": 5,
+  "name": "Engenharia de Software"
+}
+###
+PUT http://localhost:8080/academics/api/courses/2
+Content-Type: application/json
+
+{
+  "name": "Solicitadoria"
+}
+###
+DELETE http://localhost:8080/academics/api/courses/5
+
+##### Students Details
+GET http://localhost:8080/academics/api/students/2211027
+Accept: application/json
+
+##### Student Subjects
+GET http://localhost:8080/academics/api/students/2211027/subjects
+Accept: application/json
+
+##### Courses Details
+GET http://localhost:8080/academics/api/courses/1
+Accept: application/json
+
+##### Subjects
+GET http://localhost:8080/academics/api/subjects
+Accept: application/json
+
+##### Subjects of a Course
+GET http://localhost:8080/academics/api/subjects/course/1
+Accept: application/json
