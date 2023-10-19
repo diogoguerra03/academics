@@ -60,6 +60,23 @@ public class StudentBean {
         subject.addStudent(student);
     }
 
+    public void unrollStudentInSubject(String username, long subjectCode) {
+        // Find the student by username
+        Student student = entityManager.find(Student.class, username);
+        if (student == null) {
+            throw new IllegalArgumentException("Student with username " + username + " not found.");
+        }
+
+        // Find the subject by subject code
+        Subject subject = entityManager.find(Subject.class, subjectCode);
+        if (subject == null) {
+            throw new IllegalArgumentException("Subject with code " + subjectCode + " not found.");
+        }
+
+        // Enroll the student in the subject
+        subject.removeStudent(student);
+    }
+
     public Student getStudentWithSubjects(String username) {
         Student student = find(username);
         if (student != null) {

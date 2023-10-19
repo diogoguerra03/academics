@@ -14,7 +14,7 @@ public class TeacherBean {
     //        super(username, password, name, email);
     //    }
 
-    public void create(String username, String password, String name, String email) {
-        entityManager.persist(new Teacher(username, password, name, email));
+    public void create(String username, String password, String name, String email, String office) {
+        entityManager.persist(new Teacher(username, password, name, email, office));
     }
 }

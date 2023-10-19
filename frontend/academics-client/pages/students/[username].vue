@@ -5,7 +5,9 @@
   </div>
   <div v-if="subjects">
     <h2>Enrolled in:</h2>
-    {{ subjects }}
+    <p v-for="subject in subjects" >
+      {{ subject }}
+    </p>
   </div>
   <h2>Error messages:</h2>
   {{ messages }}

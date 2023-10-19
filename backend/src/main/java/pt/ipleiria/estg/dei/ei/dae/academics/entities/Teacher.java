@@ -15,7 +15,24 @@ public class Teacher extends User {
     public Teacher() {
     }
 
-    public Teacher(String username, String password, String name, String email) {
+    public Teacher(String username, String password, String name, String email, String office) {
         super(username, password, name, email);
+        this.office = office;
+    }
+
+    public String getOffice() {
+        return office;
+    }
+
+    public void setOffice(String office) {
+        this.office = office;
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
     }
 }
