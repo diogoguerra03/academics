@@ -63,6 +63,7 @@ public class Subject implements Serializable {
 
     public Subject() {
         this.students = new ArrayList<>();
+        this.teachers = new ArrayList<>();
     }
 
     public Subject(long code, String name, Course course, int courseYear, int scholarYear) {
@@ -72,6 +73,7 @@ public class Subject implements Serializable {
         this.courseYear = courseYear;
         this.scholarYear = scholarYear;
         this.students = new ArrayList<>();
+        this.teachers = new ArrayList<>();
     }
 
     public long getCode() {

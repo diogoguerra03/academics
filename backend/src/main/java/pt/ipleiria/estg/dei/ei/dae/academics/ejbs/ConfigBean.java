@@ -34,10 +34,17 @@ public class ConfigBean {
         studentBean.create("2211028", "123", "Pedro Guerra", "joao@mail.com", 2);
         administratorBean.create("admin", "123", "admin", "admin@mail.com");
         teacherBean.create("2211029", "123", "João Guerra", "joao_guerra@mail.com", "A1");
+        teacherBean.create("2211030", "123", "Maria Guerra", "maria@mail.com", "A2");
 
         studentBean.enrollStudentInSubject("2211027", 1001);
         studentBean.enrollStudentInSubject("2211027", 1003);
         studentBean.enrollStudentInSubject("2211028", 1002);
+
+        teacherBean.associateTeacherToSubject("2211029", 1001);
+        teacherBean.associateTeacherToSubject("2211029", 1002);
+        teacherBean.associateTeacherToSubject("2211030", 1003);
+
+        teacherBean.dissociateTeacherFromSubject("2211029", 1001);
 
         studentBean.unrollStudentInSubject("2211027", 1001);
 

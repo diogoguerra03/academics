@@ -54,3 +54,19 @@ Accept: application/json
 ##### Subjects of a Course
 GET http://localhost:8080/academics/api/subjects/course/1
 Accept: application/json
+
+#### Subjects Details
+GET http://localhost:8080/academics/api/subjects/1003
+Accept: application/json
+
+##### Students of a Subject
+GET http://localhost:8080/academics/api/subjects/1003/students
+Accept: application/json
+
+#### Teachers
+GET http://localhost:8080/academics/api/teachers
+Accept: application/json
+
+##### Teachers Subjects
+GET http://localhost:8080/academics/api/teachers/2211029/subjects
+Accept: application/json

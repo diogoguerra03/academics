@@ -45,7 +45,7 @@ public class StudentBean {
 
     public void enrollStudentInSubject(String username, long subjectCode) {
         // Find the student by username
-        Student student = entityManager.find(Student.class, username);
+        Student student = find(username);
         if (student == null) {
             throw new IllegalArgumentException("Student with username " + username + " not found.");
         }
