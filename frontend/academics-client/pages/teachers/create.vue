@@ -1,19 +1,15 @@
 <template>
   <form @submit.prevent="create">
     <div>Username:
-      <input v-model="studentForm.username" type="text"></div>
+      <input v-model="teacherForm.username" type="text"></div>
     <div>Password:
-      <input v-model="studentForm.password" type="password"></div>
+      <input v-model="teacherForm.password" type="password"></div>
     <div>Name:
-      <input v-model="studentForm.name" type="text"></div>
+      <input v-model="teacherForm.name" type="text"></div>
     <div>E-mail:
-      <input v-model="studentForm.email" type="text"></div>
-    <div>Course:
-      <select v-model="studentForm.courseCode">
-        <option v-for="course in courses" :value="course.code">
-          {{ course.name }}
-        </option>
-      </select>
+      <input v-model="teacherForm.email" type="text"></div>
+    <div>Office:
+      <input v-model="teacherForm.office" type="text">
     </div>
     <button type="reset">RESET</button>
     <button type="submit">CREATE</button>
@@ -22,12 +18,12 @@
   {{ message }}
 </template>
 <script setup>
-const studentForm = reactive({
+const teacherForm = reactive({
   username: '',
   password: '',
   email: '',
   name: '',
-  courseCode: ''
+  office: ''
 })
 const message = ref('')
 const config = useRuntimeConfig()
@@ -38,10 +34,10 @@ async function create() {
   const requestOptions = {
     method: 'POST',
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(studentForm)
+    body: JSON.stringify(teacherForm)
   }
-  const {error} = await useFetch(`${api}/students`, requestOptions)
-  if (!error.value) navigateTo('/students')
+  const {error} = await useFetch(`${api}/teachers`, requestOptions)
+  if (!error.value) navigateTo('/teachers')
   message.value = error.value
 }
 </script>

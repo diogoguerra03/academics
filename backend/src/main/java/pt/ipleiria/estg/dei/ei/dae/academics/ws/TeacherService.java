@@ -79,4 +79,43 @@ public class TeacherService {
                 subject.getScholarYear()
         );
     }
+
+    @POST
+    @Path("/")
+    public Response createNewTeacher (TeacherDTO teacherDTO){
+        teacherBean.create(
+                teacherDTO.getUsername(),
+                teacherDTO.getPassword(),
+                teacherDTO.getName(),
+                teacherDTO.getEmail(),
+                teacherDTO.getOffice()
+        );
+
+        Teacher newTeacher = teacherBean.find(teacherDTO.getUsername());
+        if(newTeacher == null)
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        return  Response.status(Response.Status.CREATED).entity(toDTO(newTeacher)).build();
+    }
+
+    @PUT
+    @Path("{username}")
+    public Response updateTeacher(@PathParam("username") String username, TeacherDTO teacherDTO) {
+        var teacher = teacherBean.find(username);
+        if (teacher == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        teacherBean.update(username, teacherDTO.getPassword(), teacherDTO.getName(), teacherDTO.getEmail(), teacherDTO.getOffice());
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("{username}")
+    public Response deleteTeacher(@PathParam("username") String username) {
+        var teacher = teacherBean.find(username);
+        if (teacher == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        teacherBean.remove(username);
+        return Response.ok().build();
+    }
 }

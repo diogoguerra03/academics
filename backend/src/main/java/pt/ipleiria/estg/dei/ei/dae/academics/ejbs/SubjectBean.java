@@ -58,4 +58,21 @@ public class SubjectBean {
         }
         entityManager.remove(subject);
     }
+
+    public void update(long code, String name, long courseCode, int courseYear, int scholarYear) {
+        Subject subject = entityManager.find(Subject.class, code);
+        if (subject == null) {
+            throw new IllegalArgumentException("Subject with code " + code + " not found.");
+        }
+
+        Course course = entityManager.find(Course.class, courseCode);
+        if (course == null) {
+            throw new IllegalArgumentException("Course with code " + courseCode + " not found.");
+        }
+
+        subject.setName(name);
+        subject.setCourse(course);
+        subject.setCourseYear(courseYear);
+        subject.setScholarYear(scholarYear);
+    }
 }

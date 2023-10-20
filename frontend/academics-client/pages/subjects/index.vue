@@ -4,19 +4,32 @@
     <nuxt-link to="subjects/create">Create a New Subjects</nuxt-link>
     <h2>Subjects</h2>
     <table>
-      <tr><th>Code</th><th>Name</th><th>Course Name</th><th>Course year</th><th>Scholar year</th><th>Students</th></tr>
+      <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Course Name</th>
+        <th>Course year</th>
+        <th>Scholar year</th>
+        <th>Students</th>
+      </tr>
       <tr v-for="subject in subjects">
         <td>{{ subject.code }}</td>
         <td>{{ subject.name }}</td>
         <td>{{ subject.courseName }}</td>
         <td>{{ subject.courseYear }}</td>
         <td>{{ subject.scholarYear }}</td>
-        <td><nuxt-link :to="`/subjects/${subject.code}`">Students</nuxt-link> </td>
-        <td><button @click="deleteSubject(subject.code)">Excluir</button></td>
+        <td>
+          <nuxt-link :to="`/subjects/${subject.code}`">Students</nuxt-link>
+          |
+          <nuxt-link :to="'/subjects/edit/' + subject.code">Editar</nuxt-link>
+          |
+          <button @click="deleteSubject(subject.code)">Excluir</button>
+        </td>
       </tr>
     </table>
   </div>
-  <button @click.prevent="refresh">Refresh Data</button><nuxt-link to="/">Return</nuxt-link>
+  <button @click.prevent="refresh">Refresh Data</button>
+  <nuxt-link to="/">Return</nuxt-link>
 </template>
 <script setup>
 const config = useRuntimeConfig()

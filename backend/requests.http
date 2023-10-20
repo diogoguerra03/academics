@@ -1,22 +1,23 @@
 ##### Students
 GET http://localhost:8080/academics/api/students
 Accept: application/json
+
 ###
 POST http://localhost:8080/academics/api/students
 Content-Type: application/json
 
 {
- "email": "johndoe@mail.com",
- "name": "John Doe",
- "username": "john",
- "password": "jd",
- "courseCode": 123
-
+  "email": "johndoe@mail.com",
+  "name": "John Doe",
+  "username": "john",
+  "password": "jd",
+  "courseCode": 3
 }
 
 ##### Courses
 GET http://localhost:8080/academics/api/courses
 Accept: application/json
+
 ###
 POST http://localhost:8080/academics/api/courses
 Content-Type: application/json
@@ -25,6 +26,7 @@ Content-Type: application/json
   "code": 5,
   "name": "Engenharia de Software"
 }
+
 ###
 PUT http://localhost:8080/academics/api/courses/2
 Content-Type: application/json
@@ -32,6 +34,7 @@ Content-Type: application/json
 {
   "name": "Solicitadoria"
 }
+
 ###
 DELETE http://localhost:8080/academics/api/courses/5
 
@@ -42,6 +45,19 @@ Accept: application/json
 ##### Student Subjects
 GET http://localhost:8080/academics/api/students/2211027/subjects
 Accept: application/json
+
+##### Uptade Student
+PUT http://localhost:8080/academics/api/students/2211027
+Content-Type: application/json
+
+{
+  "email": "johndoe@mail.com",
+  "name": "John Doe",
+  "username": "john",
+  "password": "jd",
+  "courseCode": 2
+}
+
 
 ##### Courses Details
 GET http://localhost:8080/academics/api/courses/1
@@ -70,3 +86,29 @@ Accept: application/json
 ##### Teachers Subjects
 GET http://localhost:8080/academics/api/teachers/2211029/subjects
 Accept: application/json
+
+#### Create Teacher
+POST http://localhost:8080/academics/api/teachers
+Content-Type: application/json
+
+{
+  "email": "jorge@mail.com",
+  "name": "Jorge",
+  "username": "jorge",
+  "password": "jorge",
+  "office": "A3"
+}
+
+#### Update Teacher
+PUT http://localhost:8080/academics/api/teachers/jorge
+Content-Type: application/json
+
+{
+  "email": "pedro@mail.com",
+  "name": "Pedro",
+  "password": "pedro",
+  "office": "A3"
+}
+
+#### Delete Teacher
+DELETE http://localhost:8080/academics/api/teachers/jorge

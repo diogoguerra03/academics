@@ -91,4 +91,20 @@ public class StudentBean {
             entityManager.remove(student);
         }
     }
+
+    public void update(String username, String password, String name, String email, long courseCode) {
+        Student student = find(username);
+        if (student != null) {
+            student.setPassword(password);
+            student.setName(name);
+            student.setEmail(email);
+
+            Course course = entityManager.find(Course.class, courseCode);
+            if (course != null) {
+                student.setCourse(course);
+            } else {
+                throw new IllegalArgumentException("Course with code " + courseCode + " not found.");
+            }
+        }
+    }
 }

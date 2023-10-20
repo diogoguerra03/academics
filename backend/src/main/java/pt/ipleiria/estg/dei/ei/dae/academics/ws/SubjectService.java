@@ -107,4 +107,15 @@ public class SubjectService {
         }
     }
 
+    @PUT
+    @Path("{code}")
+    public Response updateSubject(@PathParam("code") long code, SubjectDTO updatedSubjectDTO) {
+        try {
+            subjectBean.update(code, updatedSubjectDTO.getName(), updatedSubjectDTO.getCourseCode(), updatedSubjectDTO.getCourseYear(), updatedSubjectDTO.getScholarYear());
+            return Response.status(Response.Status.OK).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("ERROR_UPDATING_SUBJECT").build();
+        }
+    }
+
 }

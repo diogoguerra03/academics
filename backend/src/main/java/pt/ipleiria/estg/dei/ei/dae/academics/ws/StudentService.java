@@ -106,4 +106,15 @@ public class StudentService {
         studentBean.remove(username);
         return Response.ok().build();
     }
+
+    @PUT
+    @Path("{username}")
+    public Response updateStudent(@PathParam("username") String username, StudentDTO studentDTO) {
+        var student = studentBean.find(username);
+        if (student == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        studentBean.update(username, studentDTO.getPassword(), studentDTO.getName(), studentDTO.getEmail(), studentDTO.getCourseCode());
+        return Response.ok().build();
+    }
 }

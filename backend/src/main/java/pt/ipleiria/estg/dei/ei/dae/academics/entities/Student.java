@@ -59,4 +59,12 @@ public class Student extends User implements Serializable {
     public void removeSubject(Subject subject) {
         this.subjects.remove(subject);
     }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
 }

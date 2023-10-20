@@ -73,4 +73,23 @@ public class TeacherBean {
     }
 
 
+    public void update(String username, String password, String name, String email, String office) {
+        Teacher teacher = entityManager.find(Teacher.class, username);
+        if (teacher == null) {
+            throw new IllegalArgumentException("Teacher with username " + username + " not found.");
+        }
+
+        teacher.setPassword(password);
+        teacher.setName(name);
+        teacher.setEmail(email);
+        teacher.setOffice(office);
+    }
+
+    public void remove(String username) {
+        Teacher teacher = entityManager.find(Teacher.class, username);
+        if (teacher == null) {
+            throw new IllegalArgumentException("Teacher with username " + username + " not found.");
+        }
+        entityManager.remove(teacher);
+    }
 }
