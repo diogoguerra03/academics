@@ -1,3 +1,5 @@
 
 backend/.idea/misc.xml
 frontend/.idea/misc.xml
+*.xml
+frontend/academics-client/package-lock.json
