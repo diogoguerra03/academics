@@ -17,7 +17,7 @@
 
       <button type="submit">Save</button>
     </form>
-    <nuxt-link to="/courses">Back to Courses</nuxt-link>
+    <nuxt-link to="/students">Back to students</nuxt-link>
   </div>
   <h2>Error messages:</h2>
   {{ messages }}
@@ -65,8 +65,7 @@ const updateStudent = async () => {
     });
 
     if (response.ok) {
-      messages.value.push('Course updated successfully.');
-      push('/students');
+      messages.value.push('Student updated successfully.');
     } else {
       messages.value.push('Failed to update course.');
     }

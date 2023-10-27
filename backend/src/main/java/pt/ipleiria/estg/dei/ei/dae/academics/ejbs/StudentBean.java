@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.ei.dae.academics.ejbs;
 
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Course;
@@ -93,18 +94,22 @@ public class StudentBean {
     }
 
     public void update(String username, String password, String name, String email, long courseCode) {
-        Student student = find(username);
-        if (student != null) {
-            student.setPassword(password);
-            student.setName(name);
-            student.setEmail(email);
-
+        Student student = entityManager.find(Student.class, username);
+        if (student == null) {
+            System.err.println("ERROR_STUDENT_NOT_FOUND: " + username);
+            return;
+        }
+        entityManager.lock(student, LockModeType.OPTIMISTIC);
+        student.setPassword(password);
+        student.setName(name);
+        student.setEmail(email);
+        if (student.getCourse().getCode() != courseCode) {
             Course course = entityManager.find(Course.class, courseCode);
-            if (course != null) {
-                student.setCourse(course);
-            } else {
-                throw new IllegalArgumentException("Course with code " + courseCode + " not found.");
+            if (course == null) {
+                System.err.println("ERROR_COURSE_NOT_FOUND: " + courseCode);
+                return;
             }
+            student.setCourse(course);
         }
     }
 }
