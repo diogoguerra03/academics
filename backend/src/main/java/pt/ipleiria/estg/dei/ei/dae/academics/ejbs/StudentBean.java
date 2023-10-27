@@ -4,10 +4,13 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Course;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Subject;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
 
@@ -16,23 +19,29 @@ public class StudentBean {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(String username, String password, String name, String email, long courseCode) {
-        // 1. Buscar o curso correspondente pelo código do curso
-        Course course = entityManager.find(Course.class, courseCode);
-
-        if (course != null) {
-            // 2. Criar uma instância do objeto Student passando o curso como parâmetro
-            var student = new Student(username, password, name, email, course);
-
-            // 3. Persistir o objeto Student
-            entityManager.persist(student);
-
-            // 4. Adicionar o aluno à lista de alunos do curso
-            course.addStudent(student);
-        } else {
-            // Lógica para lidar com curso não encontrado, se necessário.
-            throw new IllegalArgumentException("Course with code " + courseCode + " not found.");
+    public boolean exists(String username) {
+        Query query = entityManager.createQuery(
+                "SELECT COUNT(s.username) FROM Student s WHERE s.username = :username",
+                Long.class
+        );
+        query.setParameter("username", username);
+        return (Long)query.getSingleResult() > 0L;
+    }
+    public void create(String username, String password, String name, String email,
+                       long courseCode) throws MyEntityExistsException, MyEntityNotFoundException {
+        if (exists(username)) {
+            throw new MyEntityExistsException(
+                    "Student with username '" + username + "' already exists");
         }
+        Course course = entityManager.find(Course.class, courseCode);
+        if (course == null) {
+            throw new MyEntityNotFoundException(
+                    "Course with code '" + courseCode + "' not found"
+            );
+        }
+        Student student = new Student(username, password, name, email, course);
+        entityManager.persist(student);
+        course.addStudent(student);
     }
 
     public List<Student> getAll() {
