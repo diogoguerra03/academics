@@ -5,10 +5,12 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.validation.ConstraintViolationException;
 import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Course;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Subject;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
@@ -28,7 +30,7 @@ public class StudentBean {
         return (Long)query.getSingleResult() > 0L;
     }
     public void create(String username, String password, String name, String email,
-                       long courseCode) throws MyEntityExistsException, MyEntityNotFoundException {
+                       long courseCode) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
         if (exists(username)) {
             throw new MyEntityExistsException(
                     "Student with username '" + username + "' already exists");
@@ -39,9 +41,14 @@ public class StudentBean {
                     "Course with code '" + courseCode + "' not found"
             );
         }
-        Student student = new Student(username, password, name, email, course);
-        entityManager.persist(student);
-        course.addStudent(student);
+
+        try {
+            var student = new Student(username, password, name, email, course);
+            course.addStudent(student);
+            entityManager.persist(student);
+        } catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
     }
 
     public List<Student> getAll() {
@@ -95,18 +102,23 @@ public class StudentBean {
         return student;
     }
 
-    public void remove(String username) {
+    public void remove(String username) throws MyEntityNotFoundException {
         Student student = find(username);
-        if (student != null) {
-            entityManager.remove(student);
+        if (student == null) {
+            throw new MyEntityNotFoundException(
+                    "Student with username '" + username + "' not found"
+            );
         }
+        entityManager.remove(student);
+
     }
 
-    public void update(String username, String password, String name, String email, long courseCode) {
+    public void update(String username, String password, String name, String email, long courseCode) throws MyEntityNotFoundException {
         Student student = entityManager.find(Student.class, username);
         if (student == null) {
-            System.err.println("ERROR_STUDENT_NOT_FOUND: " + username);
-            return;
+            throw new MyEntityNotFoundException(
+                    "Student with username '" + username + "' not found"
+            );
         }
         entityManager.lock(student, LockModeType.OPTIMISTIC);
         student.setPassword(password);
@@ -115,8 +127,9 @@ public class StudentBean {
         if (student.getCourse().getCode() != courseCode) {
             Course course = entityManager.find(Course.class, courseCode);
             if (course == null) {
-                System.err.println("ERROR_COURSE_NOT_FOUND: " + courseCode);
-                return;
+                throw new MyEntityNotFoundException(
+                        "Course with code '" + courseCode + "' not found"
+                );
             }
             student.setCourse(course);
         }

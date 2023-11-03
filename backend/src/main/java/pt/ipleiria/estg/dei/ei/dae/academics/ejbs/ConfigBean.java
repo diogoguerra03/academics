@@ -28,9 +28,14 @@ public class ConfigBean {
 
     @PostConstruct
     public void populateDB() {
-        courseBean.create(1, "Engenharia informática");
-        courseBean.create(2, "Engenharia civil");
-        courseBean.create(3, "Engenharia mecânica");
+        try {
+            courseBean.create(1, "Engenharia informática");
+            courseBean.create(2, "Engenharia civil");
+            courseBean.create(3, "Engenharia mecânica");
+        } catch (Exception e) {
+            logger.severe(e.getMessage());
+        }
+
         subjectBean.create(1001, "Programação", 1, 1, 1);
         subjectBean.create(1002, "Análise Matemática", 2, 1, 1);
         subjectBean.create(1003, "Física", 1, 3, 2);

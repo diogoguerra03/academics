@@ -8,6 +8,8 @@ import pt.ipleiria.estg.dei.ei.dae.academics.dtos.CourseDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.CourseBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Course;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +52,7 @@ public class CourseService {
 
     @POST
     @Path("/")
-    public Response createNewCourse(CourseDTO courseDTO) {
+    public Response createNewCourse(CourseDTO courseDTO) throws MyEntityExistsException {
         courseBean.create(
                 courseDTO.getCode(),
                 courseDTO.getName()
@@ -64,7 +66,7 @@ public class CourseService {
 
     @DELETE
     @Path("{code}") // Define o caminho para /api/courses/{code}
-    public Response deleteCourse(@PathParam("code") long code) {
+    public Response deleteCourse(@PathParam("code") long code) throws MyEntityNotFoundException {
         Course course = courseBean.find(code);
         if (course == null) {
             // O curso com o código especificado não foi encontrado
@@ -77,7 +79,7 @@ public class CourseService {
 
     @PUT
     @Path("{code}") // Define o caminho para /api/courses/{code}
-    public Response updateCourse(@PathParam("code") long code, CourseDTO updatedCourseDTO) {
+    public Response updateCourse(@PathParam("code") long code, CourseDTO updatedCourseDTO) throws MyEntityNotFoundException {
         // Verifique se o curso com o código especificado existe
         Course existingCourse = courseBean.find(code);
         if (existingCourse == null) {

@@ -1,6 +1,8 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.dtos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentDTO implements Serializable {
     private String username;
@@ -11,11 +13,24 @@ public class StudentDTO implements Serializable {
     private long courseCode; // Novo atributo courseCode
     private String courseName; // Novo atributo courseName
 
+    private List<SubjectDTO> subjects; // Novo atributo subjects
+
     // Default no-argument constructor
     public StudentDTO() {
+        this.subjects = new ArrayList<>();
     }
 
     // Constructor with all property values
+    public StudentDTO(String username, String password, String name, String email, long courseCode, String courseName, List<SubjectDTO> subjects) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.courseCode = courseCode;
+        this.courseName = courseName;
+        this.subjects = subjects;
+    }
+
     public StudentDTO(String username, String password, String name, String email, long courseCode, String courseName) {
         this.username = username;
         this.password = password;
@@ -23,6 +38,7 @@ public class StudentDTO implements Serializable {
         this.email = email;
         this.courseCode = courseCode;
         this.courseName = courseName;
+        this.subjects = new ArrayList<>();
     }
 
     // Getters and setters for each property
@@ -73,4 +89,14 @@ public class StudentDTO implements Serializable {
     public void setCourseName(String courseName) {
         this.courseName = courseName;
     }
+
+    public List<SubjectDTO> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<SubjectDTO> subjects) {
+        this.subjects = subjects;
+    }
+
+
 }
