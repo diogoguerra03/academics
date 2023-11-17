@@ -3,8 +3,12 @@
     <h2>Details of {{ username }}</h2>
     {{ student }}
   </div>
+  <nuxt-link :to="`/students/${student.username}/send-email`">
+    <button>Send Email</button></nuxt-link>
   <h2>Error messages:</h2>
   {{ messages }}
+
+
 </template>
 <script setup>
 const route = useRoute()

@@ -22,7 +22,7 @@ public class Student extends User implements Serializable {
     @NotNull
     private Course course;
 
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany(mappedBy = "students", fetch = FetchType.EAGER)
     private List<Subject> subjects;
 
     public Student() {

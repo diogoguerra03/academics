@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.ejbs;
 
+import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
@@ -13,6 +14,7 @@ import pt.ipleiria.estg.dei.ei.dae.academics.entities.Subject;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.academics.security.Hasher;
 
 import java.util.List;
 
@@ -20,6 +22,11 @@ import java.util.List;
 public class StudentBean {
     @PersistenceContext
     private EntityManager entityManager;
+
+    @EJB
+    private CourseBean courseBean;
+
+    private Hasher hasher;
 
     public boolean exists(String username) {
         Query query = entityManager.createQuery(
@@ -29,26 +36,32 @@ public class StudentBean {
         query.setParameter("username", username);
         return (Long)query.getSingleResult() > 0L;
     }
-    public void create(String username, String password, String name, String email,
-                       long courseCode) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
+    public Student create(
+            String username, String password, String name, String email, long courseCode
+    ) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
         if (exists(username)) {
             throw new MyEntityExistsException(
                     "Student with username '" + username + "' already exists");
         }
-        Course course = entityManager.find(Course.class, courseCode);
+        var course = courseBean.find(courseCode);
         if (course == null) {
             throw new MyEntityNotFoundException(
                     "Course with code '" + courseCode + "' not found"
             );
         }
 
+        Student student = null;
+
         try {
-            var student = new Student(username, password, name, email, course);
-            course.addStudent(student);
+            student = new Student(username, hasher.hash(password), name, email,
+                    course);
             entityManager.persist(student);
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
+
+        course.addStudent(student);
+        return student;
     }
 
     public List<Student> getAll() {
