@@ -1,10 +1,13 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.ws;
 
+import jakarta.mail.MessagingException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.hibernate.Hibernate;
+import pt.ipleiria.estg.dei.ei.dae.academics.dtos.EmailDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.StudentDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.SubjectDTO;
+import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.EmailBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.StudentBean;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.core.MediaType;
@@ -23,6 +26,9 @@ import java.util.stream.Collectors;
 public class StudentService {
     @EJB
     private StudentBean studentBean;
+
+    @EJB
+    private EmailBean emailBean;
 
     // Converts an entity Student to a DTO Student class
 
@@ -143,5 +149,18 @@ public class StudentService {
         }
         studentBean.update(username, studentDTO.getPassword(), studentDTO.getName(), studentDTO.getEmail(), studentDTO.getCourseCode());
         return Response.ok().build();
+    }
+
+    @POST
+    @Path("/{username}/email/send")
+    public Response sendEmail(@PathParam("username") String username, EmailDTO email)
+            throws MyEntityNotFoundException, MessagingException {
+        Student student = studentBean.find(username);
+        if (student == null) {
+            throw new MyEntityNotFoundException("Student with username '" + username
+                    + "' not found in our records.");
+        }
+        emailBean.send(student.getEmail(), email.getSubject(), email.getMessage());
+        return Response.status(Response.Status.OK).entity("E-mail sent").build();
     }
 }

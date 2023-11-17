@@ -14,6 +14,16 @@ Content-Type: application/json
   "courseCode": 3
 }
 
+
+#### STUDENT EMAIL SERVICE
+POST http://localhost:8080/academics/api/students/2211027/email/send
+Content-Type: application/json
+
+{
+  "subject": "Teste",
+  "message": "Teste"
+}
+
 ##### Courses
 GET http://localhost:8080/academics/api/courses
 Accept: application/json
@@ -112,3 +122,4 @@ Content-Type: application/json
 
 #### Delete Teacher
 DELETE http://localhost:8080/academics/api/teachers/jorge
+

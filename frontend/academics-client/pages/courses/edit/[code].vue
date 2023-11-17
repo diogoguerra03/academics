@@ -3,24 +3,56 @@
     <h2 v-once>Edit Course - {{ course.name }}</h2>
     <form @submit.prevent="updateCourse">
       <label for="name">Name:</label>
-      <input v-model="course.name" type="text" id="name" name="name">
-      <button type="submit">Save</button>
+      <div>
+      <input v-model.trim="course.name" type="text" id="name" name="name">
+      <span v-if="course.name !== null && !isNameValid" class="error">{{ formFeedback.name }}</span>
+      </div>
+      <button type="submit" :disabled="!isFormValid">Save</button>
     </form>
     <nuxt-link to="/courses">Back to Courses</nuxt-link>
   </div>
   <h2>Error messages:</h2>
   {{ messages }}
 </template>
-
+<style scoped>
+.error {
+  color: red
+}
+</style>
 <script setup>
 const route = useRoute();
 const code = route.params.code;
 const config = useRuntimeConfig();
 const api = config.public.API_URL;
 
+const formFeedback = reactive({
+  name: '',
+});
+
 const { push } = useRouter();
 const course = ref(null);
 const messages = ref([]);
+
+const isNameValid = computed(() => {
+  if (course.value.name === null) {
+    formFeedback.name = '';
+    return false;
+  }
+  if (course.value.name.length < 3) {
+    formFeedback.name = 'Name must be at least 3 characters long.';
+    return false;
+  }
+  if (course.value.name.length > 50) {
+    formFeedback.name = 'Name must be at most 50 characters long.';
+    return false;
+  }
+  formFeedback.name = '';
+  return true;
+});
+
+const isFormValid = computed(() => {
+  return isNameValid.value;
+});
 
 const fetchCourse = async () => {
   try {
